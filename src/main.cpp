@@ -15,6 +15,23 @@ frequency.
 #include <MD_MAX72xx.h>
 #include <SPI.h>
 
+// Compile-time date/time → integer constants from __DATE__ ("Mmm dd yyyy") and __TIME__ ("hh:mm:ss")
+#define COMPILE_YEAR  ((__DATE__[7]-'0')*1000 + (__DATE__[8]-'0')*100 + (__DATE__[9]-'0')*10 + (__DATE__[10]-'0'))
+#define COMPILE_DAY   ((__DATE__[4]==' ' ? 0 : (__DATE__[4]-'0'))*10 + (__DATE__[5]-'0'))
+#define COMPILE_MONTH ( \
+  __DATE__[2]=='n' ? (__DATE__[1]=='a' ? 1 : 6) : \
+  __DATE__[2]=='b' ? 2 : \
+  __DATE__[2]=='r' ? (__DATE__[0]=='M' ? 3 : 4) : \
+  __DATE__[2]=='y' ? 5 : \
+  __DATE__[2]=='l' ? 7 : \
+  __DATE__[2]=='g' ? 8 : \
+  __DATE__[2]=='p' ? 9 : \
+  __DATE__[2]=='t' ? 10 : \
+  __DATE__[2]=='v' ? 11 : 12)
+#define COMPILE_HOUR  ((__TIME__[0]-'0')*10 + (__TIME__[1]-'0'))
+#define COMPILE_MIN   ((__TIME__[3]-'0')*10 + (__TIME__[4]-'0'))
+#define COMPILE_SEC   ((__TIME__[6]-'0')*10 + (__TIME__[7]-'0'))
+
 //Set RTC to the hard-coded time on upload, 0 = Leave RTC alone
 #define FORCE_RTC_SET 0
 
@@ -140,11 +157,12 @@ void setup() {
   } else {
     if (rtc.lostPower()) {
       Serial.println("RTC lost power, setting the time!");
-      //rtc.adjust(DateTime(F(__DATE__), F(__TIME__)));
-      rtc.adjust(DateTime(2026, 5, 12, 21, 23, 0));
+      rtc.adjust(DateTime(COMPILE_YEAR, COMPILE_MONTH, COMPILE_DAY,
+                          COMPILE_HOUR, COMPILE_MIN, COMPILE_SEC));
     }
   #if FORCE_RTC_SET
-    rtc.adjust(DateTime(2026, 5, 12, 21, 23, 0));    // your personal preset
+    rtc.adjust(DateTime(COMPILE_YEAR, COMPILE_MONTH, COMPILE_DAY,
+                        COMPILE_HOUR, COMPILE_MIN, COMPILE_SEC));
   #endif
   }
 
