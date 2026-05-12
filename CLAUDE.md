@@ -25,7 +25,7 @@ Fix the following bugs one by one. Show how you plan to resolve the current issu
 - The dot matix display should show the exact frequency. For example, 94.20 should be shown as it is
 - The letters "FM" do not need to shown in the dot-matrix display.
 
-### Bug 2: Displayed Time incorrect
+### Bug 2*(FIXED): Displayed Time incorrect
 - Currently the time displayed on the Dot-matrix is not the same as the actual time according to the system clock shown on the current windows computer (synced to time in Berlin, Germany)
 - Read through the code, in particular the implementation of functions from the RTClib library, as the issues might be a result using a function without wholly understanding the implications
 - Ideally the RTC should start with the time at which it was compiled. When there is a power-loss,it should remember the time elapsed and then when it regains power, show the correct time 
