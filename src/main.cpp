@@ -141,10 +141,10 @@ void setup() {
     if (rtc.lostPower()) {
       Serial.println("RTC lost power, setting the time!");
       //rtc.adjust(DateTime(F(__DATE__), F(__TIME__)));
-      rtc.adjust(DateTime(2026, 2, 6, 11, 07, 0));
+      rtc.adjust(DateTime(2026, 5, 12, 21, 23, 0));
     }
   #if FORCE_RTC_SET
-    rtc.adjust(DateTime(2026, 2, 6, 11, 07, 0));    // your personal preset
+    rtc.adjust(DateTime(2026, 5, 12, 21, 23, 0));    // your personal preset
   #endif
   }
 
@@ -211,7 +211,7 @@ void showRadioFrequency() {
 
   // Tune radio and display formatted frequency
   radio.setFrequency(fm_freq_current);
-  radio.formatFrequency(s, sizeof(s)); // Modified to remove the "MHz"
+  sprintf(s, "%d.%02d", fm_freq_current / 100, fm_freq_current % 100);
   Serial.print("Station:");
   Serial.println(s);
 
